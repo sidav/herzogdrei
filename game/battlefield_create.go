@@ -6,7 +6,7 @@ import (
 
 func (b *Battlefield) CreateCommanderForFaction(faction *Faction, x, y float64) {
 	com := &Commander{
-		AsUnit: *b.CreateNewUnit(UNIT_COMMANDER, faction, x, y),
+		AsUnit: *b.CreateNewUnit(UNIT_COMPLANE, faction, x, y),
 	}
 	b.addActor(com)
 	faction.Commander = com

@@ -37,7 +37,13 @@ func (b *Battlefield) DoCommanderRespawnSequence(com *Commander) {
 	if geometry.GetApproxDistFloat64(hqx, hqy, cx, cy) < returnSpeed {
 		b.AddNewEffect(EFFECT_BIGGER_EXPLOSION, cx, cy, 7)
 		com.AsUnit.Health = 1
-		com.AsUnit.Fuel = 1
+		com.AsUnit.Fuel = com.GetStaticData().MaxFuel / 5
+		com.AsUnit.ChassisDegree = 270
+		com.AsUnit.snapTurretsDegreesToChassis()
+		// Change to plane if we are on ground
+		if !com.isInAir() {
+			com.AsUnit.Code = com.GetStaticData().TransformsTo
+		}
 	} else {
 		vx, vy := geometry.VectorToUnitVectorFloat64(hqx-cx, hqy-cy)
 		com.AsUnit.CenterX += vx * returnSpeed
@@ -46,6 +52,23 @@ func (b *Battlefield) DoCommanderRespawnSequence(com *Commander) {
 			b.AddNewEffect(EFFECT_BIGGER_EXPLOSION, cx, cy, 0.75)
 		}
 	}
+}
+
+func (b *Battlefield) DoCommanderTransformationSequence(com *Commander) {
+	tx, ty := com.GetTileCoordinates()
+	if !(GetUnitStaticDataByCode(com.GetStaticData().TransformsTo).IsAircraft || b.AreCoordsPassable(tx, ty)) {
+		com.resetTransformation()
+		return
+	}
+	if com.AsUnit.ChassisDegree != 270 {
+		com.AsUnit.rotateChassisTowardsVector(0, -1)
+		return
+	}
+	if com.TransformingProgress == TICKS_FOR_TRANSFORMATION {
+		com.transform()
+		return
+	}
+	com.TransformingProgress++
 }
 
 func (b *Battlefield) TryFireForCommander(com *Commander) {
@@ -61,6 +84,10 @@ func (b *Battlefield) ExecuteCommanderAction(c *Commander) {
 	}
 	if !c.IsAlive() {
 		b.DoCommanderRespawnSequence(c)
+		return
+	}
+	if c.IsTransforming {
+		b.DoCommanderTransformationSequence(c)
 		return
 	}
 	b.TryRefuelAndRepairCommander(c)

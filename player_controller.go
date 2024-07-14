@@ -49,6 +49,10 @@ func (pc *playerController) control() {
 		}
 	}
 
+	if rl.IsKeyPressed(rl.KeyTab) {
+		com.IsTransforming = true
+	}
+
 	// Attack
 	com.IsFiring = rl.IsKeyDown(rl.KeyLeftControl)
 	// Movement

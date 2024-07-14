@@ -9,7 +9,10 @@ type UnitStatic struct {
 	MovementSpeed        float64 `json:"movement_speed,omitempty"`
 	ChassisRotationSpeed int     `json:"chassis_rotation_speed,omitempty"`
 
-	IsCommander bool
+	IsCommander                        bool
+	TransformsTo                       int
+	TransformationAnimationSpritesCode string
+
 	IsAircraft  bool `json:"is_aircraft,omitempty"`
 	IsTransport bool `json:"is_transport,omitempty"`
 
@@ -22,7 +25,8 @@ type UnitStatic struct {
 }
 
 const (
-	UNIT_COMMANDER = iota
+	UNIT_COMPLANE = iota
+	UNIT_COMROBOT
 	UNIT_INFANTRY
 	UNIT_RECON
 	UNIT_QUAD
@@ -36,18 +40,20 @@ func GetUnitStaticDataByCode(code int) *UnitStatic {
 }
 
 var STableUnits = map[int]*UnitStatic{
-	UNIT_COMMANDER: {
-		DisplayedName:        "C-VTOL",
-		ChassisSpriteCode:    "cplane",
-		MaxHitpoints:         100,
-		MaxFuel:              1000,
-		MovementSpeed:        0.16,
-		ChassisRotationSpeed: 10,
-		Cost:                 10000,
-		BuildTime:            25,
-		IsCommander:          true,
-		IsAircraft:           true,
-		IsTransport:          true,
+	UNIT_COMPLANE: {
+		DisplayedName:                      "C-VTOL",
+		ChassisSpriteCode:                  "cplane",
+		MaxHitpoints:                       100,
+		MaxFuel:                            1000,
+		MovementSpeed:                      0.16,
+		ChassisRotationSpeed:               10,
+		Cost:                               10000,
+		BuildTime:                          25,
+		IsCommander:                        true,
+		TransformsTo:                       UNIT_COMROBOT,
+		TransformationAnimationSpritesCode: "cplanetransform",
+		IsAircraft:                         true,
+		IsTransport:                        true,
 		TurretsData: []*TurretStatic{
 			{
 				AttacksLand:         false,
@@ -64,6 +70,40 @@ var STableUnits = map[int]*UnitStatic{
 					Speed:                     0.35,
 					CreatesEffectOnImpact:     true,
 					EffectCreatedOnImpactCode: EFFECT_SMALL_EXPLOSION,
+				},
+			},
+		},
+	},
+	UNIT_COMROBOT: {
+		DisplayedName:                      "C-VTOL",
+		ChassisSpriteCode:                  "crobot",
+		MaxHitpoints:                       100,
+		MaxFuel:                            1000,
+		MovementSpeed:                      0.1,
+		ChassisRotationSpeed:               4,
+		Cost:                               10000,
+		BuildTime:                          25,
+		IsCommander:                        true,
+		TransformsTo:                       UNIT_COMPLANE,
+		TransformationAnimationSpritesCode: "crobottransform",
+		IsAircraft:                         false,
+		IsTransport:                        false,
+		TurretsData: []*TurretStatic{
+			{
+				AttacksLand:         false,
+				FireRange:           5,
+				FireSpreadDegrees:   3,
+				ShotRangeSpread:     0.4,
+				CooldownAfterVolley: 25,
+				FiredProjectileData: &ProjectileStatic{
+					SpriteCode:                "shell",
+					SplashRadius:              0.1,
+					HitDamage:                 15,
+					SplashDamage:              10,
+					Size:                      0.3,
+					Speed:                     0.2,
+					CreatesEffectOnImpact:     true,
+					EffectCreatedOnImpactCode: EFFECT_REGULAR_EXPLOSION,
 				},
 			},
 		},

@@ -5,9 +5,11 @@ import (
 )
 
 type Commander struct {
-	AsUnit      Unit
-	CarriedUnit *Unit
-	IsFiring    bool
+	AsUnit               Unit
+	CarriedUnit          *Unit
+	IsFiring             bool
+	IsTransforming       bool
+	TransformingProgress int
 }
 
 func (c *Commander) GetPhysicalCenterCoords() (float64, float64) {
@@ -23,7 +25,19 @@ func (c *Commander) IsAlive() bool {
 }
 
 func (c *Commander) isInAir() bool {
-	return true // TODO: handle transformation here
+	return c.GetStaticData().IsAircraft
+}
+
+func (c *Commander) resetTransformation() {
+	c.IsTransforming = false
+	c.TransformingProgress = 0
+}
+
+func (c *Commander) transform() {
+	c.AsUnit.Code = c.GetStaticData().TransformsTo
+	c.AsUnit.Turrets[0].staticData = c.GetStaticData().TurretsData[0]
+	c.AsUnit.snapTurretsDegreesToChassis()
+	c.resetTransformation()
 }
 
 func (c *Commander) GetTileCoordinates() (int, int) {

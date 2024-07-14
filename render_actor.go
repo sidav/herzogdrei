@@ -8,10 +8,6 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func (r *renderer) renderCommander(b *Battlefield, c *Commander) {
-	r.renderUnit(b, &c.AsUnit)
-}
-
 func (r *renderer) renderUnit(b *Battlefield, u *Unit) {
 	x, y := u.GetPhysicalCenterCoords()
 	offset := 0.5
