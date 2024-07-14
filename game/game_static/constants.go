@@ -1,3 +1,3 @@
 package game_static
 
-var TICKS_FOR_TRANSFORMATION = 60
+var TICKS_FOR_TRANSFORMATION = 73

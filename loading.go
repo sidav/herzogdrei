@@ -87,7 +87,7 @@ func loadSprites() {
 	// Commander here
 	currPath = "resources/sprites/commander/"
 	unitChassisAtlaces["cplane"] = satlas.CreateDirectionalAtlasFromFile(currPath+"command_plane.png", 32, 16, 1, 4, true)
-	effectsAtlaces["cplanetransform"] = satlas.CreateAtlasFromFile(currPath+"command_plane_to_robot_transform.png", 16, 16, 6, true)
+	effectsAtlaces["cplanetransform"] = satlas.CreateAtlasFromFile(currPath+"command_plane_to_robot_transform.png", 16, 16, 8, true)
 	unitChassisAtlaces["crobot"] = satlas.CreateDirectionalAtlasFromFile(currPath+"command_robot.png", 32, 16, 1, 2, true)
-	effectsAtlaces["crobottransform"] = satlas.CreateAtlasFromFile(currPath+"command_robot_to_plane_transform.png", 16, 16, 6, true)
+	effectsAtlaces["crobottransform"] = satlas.CreateAtlasFromFile(currPath+"command_robot_to_plane_transform.png", 16, 16, 8, true)
 }
