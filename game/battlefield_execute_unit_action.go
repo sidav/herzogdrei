@@ -43,8 +43,7 @@ func (b *Battlefield) ExecuteStartMovingActionForUnit(u *Unit) {
 		return
 	}
 
-	b.Tiles[utx][uty].landActorHere = nil
-	b.Tiles[nextTileX][nextTileY].landActorHere = u
+	b.SwitchTilePointersForGroundActor(u, utx, uty, nextTileX, nextTileY)
 	u.Action.Kind = ACTION_MOVE
 }
 

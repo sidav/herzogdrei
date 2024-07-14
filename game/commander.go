@@ -2,6 +2,7 @@ package game
 
 import (
 	. "herzog/game/game_static"
+	"herzog/lib/geometry"
 )
 
 type Commander struct {
@@ -33,16 +34,8 @@ func (c *Commander) resetTransformation() {
 	c.TransformingProgress = 0
 }
 
-func (c *Commander) transform() {
-	c.AsUnit.Code = c.GetStaticData().TransformsTo
-	c.AsUnit.Turrets[0].staticData = c.GetStaticData().TurretsData[0]
-	c.AsUnit.snapTurretsDegreesToChassis()
-	c.resetTransformation()
-}
-
 func (c *Commander) GetTileCoordinates() (int, int) {
-	x, y := c.GetPhysicalCenterCoords()
-	return int(x), int(y)
+	return geometry.TrueCoordsToTileCoords(c.GetPhysicalCenterCoords())
 }
 
 func (c *Commander) GetStaticData() *UnitStatic {

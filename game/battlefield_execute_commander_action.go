@@ -34,6 +34,10 @@ func (b *Battlefield) DoCommanderRespawnSequence(com *Commander) {
 	const returnSpeed = 0.2
 	hqx, hqy := com.AsUnit.Faction.HQBuilding.GetPhysicalCenterCoords()
 	cx, cy := com.GetPhysicalCenterCoords()
+	tx, ty := com.GetTileCoordinates()
+	if b.GetGroundActorAtTileCoordinates(tx, ty) == com {
+		b.Tiles[tx][ty].landActorHere = nil
+	}
 	if geometry.GetApproxDistFloat64(hqx, hqy, cx, cy) < returnSpeed {
 		b.AddNewEffect(EFFECT_BIGGER_EXPLOSION, cx, cy, 7)
 		com.AsUnit.Health = 1
@@ -42,7 +46,7 @@ func (b *Battlefield) DoCommanderRespawnSequence(com *Commander) {
 		com.AsUnit.snapTurretsDegreesToChassis()
 		// Change to plane if we are on ground
 		if !com.isInAir() {
-			com.AsUnit.Code = com.GetStaticData().TransformsTo
+			b.transformCommander(com)
 		}
 	} else {
 		vx, vy := geometry.VectorToUnitVectorFloat64(hqx-cx, hqy-cy)
@@ -65,7 +69,7 @@ func (b *Battlefield) DoCommanderTransformationSequence(com *Commander) {
 		return
 	}
 	if com.TransformingProgress == TICKS_FOR_TRANSFORMATION {
-		com.transform()
+		b.transformCommander(com)
 		return
 	}
 	com.TransformingProgress++
@@ -112,16 +116,25 @@ func (b *Battlefield) ExecuteCMoveActionForCommander(c *Commander) {
 	if c.AsUnit.ChassisDegree != targetDegree {
 		c.AsUnit.rotateChassisTowardsVector(vx, vy)
 	} else {
-		// vx, vy = geometry.DegreeToUnitVector(c.ChassisDegree)
-		c.AsUnit.CenterX += vx * moveSpeed
-		c.AsUnit.CenterY += vy * moveSpeed
-		spendFuel := 1
-		if c.CarriedUnit != nil {
-			spendFuel = 2
-		}
-		c.AsUnit.Fuel -= spendFuel
-		if c.AsUnit.Fuel < 0 {
-			c.AsUnit.Fuel = 0
+		oldTx, oldTy := geometry.TrueCoordsToTileCoords(c.AsUnit.CenterX, c.AsUnit.CenterY)
+		newCx, newCy := c.AsUnit.CenterX+vx*moveSpeed, c.AsUnit.CenterY+vy*moveSpeed
+		newTx, newTy := geometry.TrueCoordsToTileCoords(newCx, newCy)
+		if c.isInAir() || b.GetGroundActorAtTileCoordinates(newTx, newTy) == c ||
+			b.AreCoordsPassable(newTx, newTy) {
+
+			if !c.isInAir() {
+				b.SwitchTilePointersForGroundActor(c, oldTx, oldTy, newTx, newTy)
+			}
+			c.AsUnit.CenterX = newCx
+			c.AsUnit.CenterY = newCy
+			spendFuel := 1
+			if c.CarriedUnit != nil {
+				spendFuel = 2
+			}
+			c.AsUnit.Fuel -= spendFuel
+			if c.AsUnit.Fuel < 0 {
+				c.AsUnit.Fuel = 0
+			}
 		}
 	}
 }
@@ -165,5 +178,30 @@ func (b *Battlefield) ExecuteCDropActionForCommander(c *Commander) {
 		c.CarriedUnit = nil
 
 		c.AsUnit.Action.Kind = ACTION_NONE
+	}
+}
+
+func (b *Battlefield) transformCommander(com *Commander) {
+	tx, ty := com.GetTileCoordinates()
+	com.AsUnit.Code = com.GetStaticData().TransformsTo
+	com.AsUnit.Turrets[0].staticData = com.GetStaticData().TurretsData[0]
+	com.AsUnit.snapTurretsDegreesToChassis()
+	com.resetTransformation()
+	actorAtTile := b.GetGroundActorAtTileCoordinates(tx, ty)
+	// If transformed TO plane...
+	if com.isInAir() {
+		if actorAtTile == com {
+			b.Tiles[tx][ty].landActorHere = nil
+		} else if actorAtTile == com.GetFaction().HQBuilding {
+			// It's OK, do nothing
+		} else if actorAtTile != com {
+			// Something is wrong
+			panic("Transformation collision error")
+		}
+	} else {
+		if actorAtTile != nil {
+			panic("Transformation collision error")
+		}
+		b.Tiles[tx][ty].landActorHere = com
 	}
 }
