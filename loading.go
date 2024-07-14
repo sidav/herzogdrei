@@ -54,7 +54,6 @@ func loadSprites() {
 
 	unitChassisAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/units/"
-	unitChassisAtlaces["commander"] = satlas.CreateDirectionalAtlasFromFile(currPath+"aircrafts/command_plane.png", 32, 16, 1, 2, true)
 	unitChassisAtlaces["infantry"] = satlas.CreateDirectionalAtlasFromFile(currPath+"infantry.png", 32, 16, 1, 2, true)
 	unitChassisAtlaces["infantry_recon"] = satlas.CreateDirectionalAtlasFromFile(currPath+"infantry_recon.png", 32, 16, 1, 2, true)
 	unitChassisAtlaces["quad"] = satlas.CreateDirectionalAtlasFromFile(currPath+"quad.png", 32, 16, 1, 2, true)
@@ -84,4 +83,11 @@ func loadSprites() {
 	effectsAtlaces["smallexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion_small.png", 4, 4, 16, false)
 	effectsAtlaces["regularexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion.png", 16, 16, 3, false)
 	effectsAtlaces["biggerexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion_bigger.png", 20, 20, 7, false)
+
+	// Commander here
+	currPath = "resources/sprites/commander/"
+	unitChassisAtlaces["cplane"] = satlas.CreateDirectionalAtlasFromFile(currPath+"command_plane.png", 32, 16, 1, 4, true)
+	effectsAtlaces["cplanetransform"] = satlas.CreateAtlasFromFile(currPath+"command_plane_to_robot_transform.png", 16, 16, 6, true)
+	unitChassisAtlaces["crobot"] = satlas.CreateDirectionalAtlasFromFile(currPath+"command_robot.png", 32, 16, 1, 2, true)
+	effectsAtlaces["crobottransform"] = satlas.CreateAtlasFromFile(currPath+"command_robot_to_plane_transform.png", 16, 16, 6, true)
 }

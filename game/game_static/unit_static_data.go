@@ -38,11 +38,11 @@ func GetUnitStaticDataByCode(code int) *UnitStatic {
 var STableUnits = map[int]*UnitStatic{
 	UNIT_COMMANDER: {
 		DisplayedName:        "C-VTOL",
-		ChassisSpriteCode:    "commander",
+		ChassisSpriteCode:    "cplane",
 		MaxHitpoints:         100,
 		MaxFuel:              1000,
 		MovementSpeed:        0.16,
-		ChassisRotationSpeed: 12,
+		ChassisRotationSpeed: 10,
 		Cost:                 10000,
 		BuildTime:            25,
 		IsCommander:          true,
