@@ -26,7 +26,7 @@ func (b *Battlefield) areActorsInRangeFromEachOther(a1, a2 Actor, rang float64) 
 	return geometry.GetApproxDistFloat64(a1x, a1y, a2x, a2y) <= rang
 }
 
-func (b *Battlefield) getApproxRangeBetweenActors(a1, a2 Actor) float64 {
+func (b *Battlefield) getApproxRangeBetweenCoordinatables(a1, a2 Coordinatable) float64 {
 	a1x, a1y := a1.GetPhysicalCenterCoords()
 	a2x, a2y := a2.GetPhysicalCenterCoords()
 	return geometry.GetApproxDistFloat64(a1x, a1y, a2x, a2y)

@@ -7,6 +7,8 @@ func (b *Battlefield) dealDamage(amount int, target Actor) {
 	case *Unit:
 		target.(*Unit).Health -= amount
 	case *Building:
-		target.(*Building).Hitpoints -= amount
+		if target.(*Building).IsAttackable() {
+			target.(*Building).Hitpoints -= amount
+		}
 	}
 }

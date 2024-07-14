@@ -28,10 +28,13 @@ func (b *Battlefield) actTurret(shooter Actor, t *Turret) {
 		t.targetActor = orderedTarget
 	}
 	// Cancel the current turret's target if it can't be attacked right now
-	if t.targetActor != nil &&
-		(!t.targetActor.IsAlive() ||
-			!b.areActorsInRangeFromEachOther(shooter, t.targetActor, turretRange)) {
-		t.targetActor = nil
+	if t.targetActor != nil {
+		if !t.targetActor.IsAlive() ||
+			!b.areActorsInRangeFromEachOther(shooter, t.targetActor, turretRange) ||
+			!b.isTargetAttackableForTurret(t, t.targetActor) {
+
+			t.targetActor = nil
+		}
 	}
 
 	// if targetActor not set...
@@ -110,11 +113,11 @@ func (b *Battlefield) shootAsTurret(shooter Actor, t *Turret) {
 	t.nextTickToAct = b.CurrentTick + t.GetStaticData().CooldownAfterVolley
 }
 
-func (b *Battlefield) canTurretAttackActor(t *Turret, a Actor) bool {
-	if _, ok := a.(*Commander); ok {
-		return t.GetStaticData().AttacksAir
+func (b *Battlefield) isTargetAttackableForTurret(t *Turret, target Actor) bool {
+	if target.isInAir() {
+		return t.staticData.AttacksAir
 	}
-	return t.GetStaticData().AttacksLand
+	return t.staticData.AttacksLand
 }
 
 func (b *Battlefield) getGoodTargetForActorsTurret(a Actor, t *Turret, ignoreRange, allowBuildings bool) Actor {
@@ -130,7 +133,7 @@ func (b *Battlefield) getGoodTargetForActorsTurret(a Actor, t *Turret, ignoreRan
 		}
 		if ignoreRange || b.areActorsInRangeFromEachOther(a, enemy, t.GetStaticData().FireRange) {
 			if currTarget == nil ||
-				b.getApproxRangeBetweenActors(a, currTarget) >= b.getApproxRangeBetweenActors(a, enemy) {
+				b.getApproxRangeBetweenCoordinatables(a, currTarget) >= b.getApproxRangeBetweenCoordinatables(a, enemy) {
 				currTarget = enemy
 			}
 		}

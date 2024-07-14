@@ -20,6 +20,10 @@ func (p *Projectile) GetStaticData() *ProjectileStatic {
 	return p.staticData
 }
 
+func (p *Projectile) GetPhysicalCenterCoords() (float64, float64) {
+	return p.CenterX, p.CenterY
+}
+
 func (p *Projectile) isHoming() bool {
 	return p.GetStaticData().RotationSpeed > 0
 }
