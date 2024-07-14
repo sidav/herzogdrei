@@ -13,9 +13,10 @@ func (b *Battlefield) Init() {
 	b.initFromStringMap()
 
 	// Random enemy units for debug
+	f1bx, f1by := b.Factions[0].HQBuilding.TopLeftX, b.Factions[0].HQBuilding.TopLeftY
 	for i := 0; i < 20; i++ {
 		x, y := -1, -1
-		for !b.AreCoordsPassable(x, y) {
+		for !b.AreCoordsPassable(x, y) || geometry.GetApproxDistFromTo(x, y, f1bx, f1by) < 7 {
 			x, y = rnd.Rand(len(b.Tiles)), rnd.Rand(len(b.Tiles[0]))
 		}
 		rx, ry := geometry.TileCoordsToTrueCoords(x, y)

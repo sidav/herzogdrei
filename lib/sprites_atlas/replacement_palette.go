@@ -3,25 +3,26 @@ package spritesatlas
 import "image/color"
 
 var zeroTiltColor uint8 = 32
+var mediumTiltColor uint8 = 64
 var strongerTiltColor uint8 = 128
 
 var FactionColors = []color.RGBA{
 	{
-		R: zeroTiltColor,
-		G: zeroTiltColor,
+		R: mediumTiltColor,
+		G: mediumTiltColor,
 		B: 255,
 		A: 255,
 	},
 	{
 		R: 255,
-		G: zeroTiltColor,
-		B: zeroTiltColor,
+		G: mediumTiltColor,
+		B: mediumTiltColor,
 		A: 255,
 	},
 	{
-		R: zeroTiltColor,
+		R: mediumTiltColor,
 		G: 255,
-		B: zeroTiltColor,
+		B: mediumTiltColor,
 		A: 255,
 	},
 	{
