@@ -1,0 +1,9 @@
+package game_static
+
+const (
+	ORDER_STANDBY = iota
+	ORDER_PATROL
+	ORDER_SEARCHNDESTROY
+	ORDER_CAPTURE
+	ORDERS_TOTAL
+)
