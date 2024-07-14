@@ -37,20 +37,20 @@ func loadSprites() {
 	}
 	for i, e := range entries {
 		name := fmt.Sprintf("tile%d", i)
-		tilesAtlaces[name] = satlas.CreateAtlasFromFile(currPath+e.Name(), 0, 0, 16, 16, 16, 16, 1, false, false)
+		tilesAtlaces[name] = satlas.CreateAtlasFromFile(currPath+e.Name(), 16, 16, 1, false)
 	}
 	currPath = "resources/sprites/terrain/"
-	tilesAtlaces["wall"] = satlas.CreateAtlasFromFile(currPath+"wall.png", 0, 0, 16, 16, 16, 16, 1, false, false)
-	tilesAtlaces["sand1"] = satlas.CreateAtlasFromFile(currPath+"sand1.png", 0, 0, 16, 16, 16, 16, 1, false, false)
-	tilesAtlaces["sand2"] = satlas.CreateAtlasFromFile(currPath+"sand2.png", 0, 0, 16, 16, 16, 16, 1, false, false)
-	tilesAtlaces["sand3"] = satlas.CreateAtlasFromFile(currPath+"sand3.png", 0, 0, 16, 16, 16, 16, 1, false, false)
-	tilesAtlaces["rocks"] = satlas.CreateAtlasFromFile(currPath+"rocks.png", 0, 0, 16, 16, 16, 16, 1, false, false)
+	tilesAtlaces["wall"] = satlas.CreateAtlasFromFile(currPath+"wall.png", 16, 16, 1, false)
+	tilesAtlaces["sand1"] = satlas.CreateAtlasFromFile(currPath+"sand1.png", 16, 16, 1, false)
+	tilesAtlaces["sand2"] = satlas.CreateAtlasFromFile(currPath+"sand2.png", 16, 16, 1, false)
+	tilesAtlaces["sand3"] = satlas.CreateAtlasFromFile(currPath+"sand3.png", 16, 16, 1, false)
+	tilesAtlaces["rocks"] = satlas.CreateAtlasFromFile(currPath+"rocks.png", 16, 16, 1, false)
 
 	buildingsAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/buildings/"
-	buildingsAtlaces["main"] = satlas.CreateAtlasFromFile(currPath+"airfactory2.png", 0, 0, 96, 64, 48, 32, 1, false, true)
-	buildingsAtlaces["main2"] = satlas.CreateAtlasFromFile(currPath+"HT_lab.png", 0, 0, 64, 64, 64, 64, 1, false, true)
-	buildingsAtlaces["base"] = satlas.CreateAtlasFromFile(currPath+"base.png", 0, 0, 64, 64, 32, 32, 1, false, true)
+	buildingsAtlaces["main"] = satlas.CreateAtlasFromFile(currPath+"airfactory2.png", 48, 32, 1, true)
+	buildingsAtlaces["main2"] = satlas.CreateAtlasFromFile(currPath+"HT_lab.png", 64, 64, 1, true)
+	buildingsAtlaces["base"] = satlas.CreateAtlasFromFile(currPath+"base.png", 32, 32, 1, true)
 
 	unitChassisAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/units/"
@@ -77,11 +77,11 @@ func loadSprites() {
 
 	uiAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/ui/"
-	uiAtlaces["factionflag"] = satlas.CreateAtlasFromFile(currPath+"building_faction_flag.png", 0, 0, 4, 4, 4, 4, 4, false, true)
+	uiAtlaces["factionflag"] = satlas.CreateAtlasFromFile(currPath+"building_faction_flag.png", 4, 4, 4, true)
 
 	effectsAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/effects/"
-	effectsAtlaces["smallexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion_small.png", 0, 0, 4, 4, 4, 4, 16, false, false)
-	effectsAtlaces["regularexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion.png", 0, 0, 16, 16, 16, 16, 3, false, false)
-	effectsAtlaces["biggerexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion_bigger.png", 0, 0, 40, 40, 20, 20, 3, false, false)
+	effectsAtlaces["smallexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion_small.png", 4, 4, 16, false)
+	effectsAtlaces["regularexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion.png", 16, 16, 3, false)
+	effectsAtlaces["biggerexplosion"] = satlas.CreateAtlasFromFile(currPath+"explosion_bigger.png", 20, 20, 7, false)
 }

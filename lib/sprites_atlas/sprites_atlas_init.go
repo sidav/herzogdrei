@@ -14,8 +14,7 @@ func (sa *SpriteAtlas) GetDebugDataLine() string {
 	return fmt.Sprintf("Colors %d, directions %d, frames in first %d", len(sa.atlas), len(sa.atlas[0]), len(sa.atlas[0][0]))
 }
 
-func CreateAtlasFromFile(filename string, topleftx, toplefty, originalSpriteW, originalSpriteH,
-	desiredSpriteW, desiredSpriteH, totalFrames int, createAllDirections, createAllColors bool) *SpriteAtlas {
+func CreateAtlasFromFile(filename string, desiredSpriteW, desiredSpriteH, totalFrames int, createAllColors bool) *SpriteAtlas {
 
 	newAtlas := SpriteAtlas{
 		// spriteSize: desiredSpriteSize * int(SPRITE_SCALE_FACTOR),
@@ -31,27 +30,20 @@ func CreateAtlasFromFile(filename string, topleftx, toplefty, originalSpriteW, o
 	img, _ := png.Decode(file)
 	file.Close()
 
+	originalSpriteW := img.Bounds().Dx() / totalFrames
+	originalSpriteH := img.Bounds().Dy()
+
 	for i := range newAtlas.atlas {
-		if createAllDirections {
-			newAtlas.atlas[i] = make([][]rl.Texture2D, 4)
-		} else {
-			newAtlas.atlas[i] = make([][]rl.Texture2D, 1)
-		}
-		// newAtlas.atlas
+		newAtlas.atlas[i] = make([][]rl.Texture2D, 1)
+
 		for currFrame := 0; currFrame < totalFrames; currFrame++ {
-			currPic := extractSubimageFromImage(img, topleftx+currFrame*originalSpriteW, toplefty, originalSpriteW, originalSpriteH)
+			currPic := extractSubimageFromImage(img, currFrame*originalSpriteW, 0, originalSpriteW, originalSpriteH)
 			rlImg := rl.NewImageFromImage(currPic)
 			if createAllColors {
 				replaceImageColorsToFactionImages(rlImg, i)
 			}
 			rl.ImageResizeNN(rlImg, int32(desiredSpriteW)*int32(SpriteScaleFactor), int32(desiredSpriteH)*int32(SpriteScaleFactor))
 			newAtlas.atlas[i][0] = append(newAtlas.atlas[i][0], rl.LoadTextureFromImage(rlImg))
-			if createAllDirections {
-				for currDir := 1; currDir < 4; currDir++ {
-					rl.ImageRotateCW(rlImg)
-					newAtlas.atlas[i][currDir] = append(newAtlas.atlas[i][currDir], rl.LoadTextureFromImage(rlImg))
-				}
-			}
 		}
 	}
 	DebugWritef("LOADING %s: created atlas {%s}\n", filename, newAtlas.GetDebugDataLine())
