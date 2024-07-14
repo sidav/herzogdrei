@@ -15,7 +15,7 @@ func (r *renderer) renderCommander(b *Battlefield, c *Commander) {
 func (r *renderer) renderUnit(b *Battlefield, u *Unit) {
 	x, y := u.GetPhysicalCenterCoords()
 	offset := 0.5
-	chassisW := unitChassisAtlaces["commander"].GetSpriteByColorDegreeAndFrameNumber(0, u.ChassisDegree, 0).Width
+	chassisW := unitChassisAtlaces[u.GetStaticData().ChassisSpriteCode].GetSpriteByColorDegreeAndFrameNumber(0, u.ChassisDegree, 0).Width
 	if chassisW > TILE_SIZE_IN_PIXELS {
 		offset = float64(chassisW) / float64(TILE_SIZE_IN_PIXELS) / 2
 	}
