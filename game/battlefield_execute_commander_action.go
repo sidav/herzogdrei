@@ -146,12 +146,12 @@ func (b *Battlefield) ExecuteCPickupActionForCommander(c *Commander) {
 		if bld.Faction == c.AsUnit.Faction && bld.Faction.FinishedProduction() {
 			// create the unit
 			c.CarriedUnit = b.CreateNewUnit(
-				c.AsUnit.Faction.CurrentBuiltUnitCode,
+				c.AsUnit.Faction.currentBuiltUnitCode,
 				c.AsUnit.Faction,
 				c.AsUnit.CenterX,
 				c.AsUnit.CenterY,
 			)
-			c.CarriedUnit.Order.Code = c.AsUnit.Faction.Commander.AsUnit.Faction.CurrentBuiltUnitOrderCode
+			c.CarriedUnit.Order.Code = c.AsUnit.Faction.Commander.AsUnit.Faction.currentBuiltUnitOrderCode
 			// Reset the faction build state
 			c.AsUnit.Faction.ClearProductionState()
 		}

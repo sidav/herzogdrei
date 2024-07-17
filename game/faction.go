@@ -10,29 +10,51 @@ type Faction struct {
 	ColorNumber int
 	Gold        int
 
-	CurrentBuiltUnitCode      int
-	CurrentBuiltUnitOrderCode int
-	CurrentBuildProgress      int
-	BuildsUnitNow             bool
+	currentBuiltUnitCode      int
+	currentBuiltUnitOrderCode int
+	currentBuildProgress      int
+	buildsUnitNow             bool
 }
 
 func (f *Faction) GetTotalCostForCurrentProduction() int {
-	unitCost := STableUnits[f.CurrentBuiltUnitCode].Cost
-	orderCost := STableUnits[f.CurrentBuiltUnitCode].OrderCosts[f.CurrentBuiltUnitOrderCode]
+	unitCost := STableUnits[f.currentBuiltUnitCode].Cost
+	orderCost := STableUnits[f.currentBuiltUnitCode].OrderCosts[f.currentBuiltUnitOrderCode]
 	return unitCost + orderCost
 }
 
+func (f *Faction) ProductionInProgress() bool {
+	return f.buildsUnitNow
+}
+
 func (f *Faction) FinishedProduction() bool {
-	return f.CurrentBuildProgress == GetUnitStaticDataByCode(f.CurrentBuiltUnitCode).BuildTime
+	return f.currentBuildProgress == GetUnitStaticDataByCode(f.currentBuiltUnitCode).BuildTime
+}
+
+func (f *Faction) StartProduction() {
+	f.buildsUnitNow = true
+}
+
+func (f *Faction) SetSelectedProduction(unitCode, orderCode int) {
+	if f.buildsUnitNow {
+		panic("Can't call this now")
+	}
+	f.currentBuiltUnitCode = unitCode
+	f.currentBuiltUnitOrderCode = orderCode
+}
+
+func (f *Faction) GetSelectedProduction() (unitCode, orderCode int) {
+	unitCode = f.currentBuiltUnitCode
+	orderCode = f.currentBuiltUnitOrderCode
+	return
 }
 
 func (f *Faction) GetCurrentProductionPercentage() int {
-	return 100 * f.CurrentBuildProgress / GetUnitStaticDataByCode(f.CurrentBuiltUnitCode).BuildTime
+	return 100 * f.currentBuildProgress / GetUnitStaticDataByCode(f.currentBuiltUnitCode).BuildTime
 }
 
 func (f *Faction) ClearProductionState() {
-	f.BuildsUnitNow = false
-	f.CurrentBuildProgress = 0
+	f.buildsUnitNow = false
+	f.currentBuildProgress = 0
 }
 
 func (f *Faction) DoProductionStep() {
@@ -40,12 +62,12 @@ func (f *Faction) DoProductionStep() {
 	if f.FinishedProduction() {
 		return
 	}
-	price := cost / GetUnitStaticDataByCode(f.CurrentBuiltUnitCode).BuildTime
-	if f.CurrentBuildProgress == 0 { // Align price division on first spending tick
-		price += cost % GetUnitStaticDataByCode(f.CurrentBuiltUnitCode).BuildTime
+	price := cost / GetUnitStaticDataByCode(f.currentBuiltUnitCode).BuildTime
+	if f.currentBuildProgress == 0 { // Align price division on first spending tick
+		price += cost % GetUnitStaticDataByCode(f.currentBuiltUnitCode).BuildTime
 	}
 	if f.Gold > price {
 		f.Gold -= price
-		f.CurrentBuildProgress++
+		f.currentBuildProgress++
 	}
 }

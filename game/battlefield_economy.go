@@ -10,7 +10,7 @@ func (b *Battlefield) DoEconomyTick() {
 	}
 
 	for _, f := range b.Factions {
-		if f.BuildsUnitNow {
+		if f.ProductionInProgress() {
 			f.DoProductionStep()
 		}
 	}

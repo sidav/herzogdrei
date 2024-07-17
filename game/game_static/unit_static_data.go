@@ -24,6 +24,11 @@ type UnitStatic struct {
 	OrderCosts map[int]int
 }
 
+func (us *UnitStatic) CanDoOrder(code int) bool {
+	_, can := us.OrderCosts[code]
+	return can
+}
+
 const (
 	UNIT_COMPLANE = iota
 	UNIT_COMROBOT

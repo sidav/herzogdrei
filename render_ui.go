@@ -15,7 +15,7 @@ func (r *renderer) renderUI(b *game.Battlefield, f *game.Faction) {
 	if f.Commander.CarriedUnit != nil {
 		r.drawUnitInfo(f.Commander.CarriedUnit, "Carried unit", WINDOW_W-320, 0)
 	} else {
-		if f.BuildsUnitNow {
+		if f.ProductionInProgress() {
 			r.drawBuildProgressBar(f)
 		} else {
 			r.drawBuildBar(f)
@@ -51,11 +51,12 @@ func (r *renderer) drawStatusbars(b *game.Battlefield, f *game.Faction) {
 }
 
 func (r *renderer) drawBuildBar(f *game.Faction) {
+	code, order := f.GetSelectedProduction()
 	r.drawOutlinedRect(WINDOW_W-320, 0, 320, 140, 3, rl.Red, rl.Black)
 	r.drawTextCenteredAt("BUILD", WINDOW_W-160, 3, 32, rl.White)
-	r.drawTextCenteredAt(strings.CenterStringBetween("<Q", game_static.GetUnitStaticDataByCode(f.CurrentBuiltUnitCode).DisplayedName, ">E", 16),
+	r.drawTextCenteredAt(strings.CenterStringBetween("<Q", game_static.GetUnitStaticDataByCode(code).DisplayedName, ">E", 16),
 		WINDOW_W-160, 36, 32, rl.White)
-	r.drawTextCenteredAt(strings.CenterStringBetween("<A", game.GetOrderName(f.CurrentBuiltUnitOrderCode), ">D", 16),
+	r.drawTextCenteredAt(strings.CenterStringBetween("<A", game.GetOrderName(order), ">D", 16),
 		WINDOW_W-160, 68, 32, rl.White)
 	r.drawTextCenteredAt(fmt.Sprintf("TOTAL $%d", f.GetTotalCostForCurrentProduction()),
 		WINDOW_W-160, 100, 32, rl.White)
@@ -73,8 +74,9 @@ func (r *renderer) drawBuildProgressBar(f *game.Faction) {
 	} else {
 		r.drawTextCenteredAt("READY", WINDOW_W-windowWidth/2, 3, 32, rl.White)
 	}
-	r.drawTextCenteredAt(game_static.GetUnitStaticDataByCode(f.CurrentBuiltUnitCode).DisplayedName, WINDOW_W-windowWidth/2, 40, 32, rl.White)
-	r.drawTextCenteredAt(game.GetOrderName(f.CurrentBuiltUnitOrderCode), WINDOW_W-windowWidth/2, 72, 32, rl.White)
+	code, order := f.GetSelectedProduction()
+	r.drawTextCenteredAt(game_static.GetUnitStaticDataByCode(code).DisplayedName, WINDOW_W-windowWidth/2, 40, 32, rl.White)
+	r.drawTextCenteredAt(game.GetOrderName(order), WINDOW_W-windowWidth/2, 72, 32, rl.White)
 }
 
 func (r *renderer) drawUnitInfo(u *game.Unit, title string, x, y int32) {

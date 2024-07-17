@@ -19,7 +19,7 @@ func (pc *playerController) init(f *game.Faction) {
 func (pc *playerController) control() {
 	com := pc.faction.Commander
 
-	if !pc.faction.BuildsUnitNow && com.CarriedUnit == nil {
+	if !pc.faction.ProductionInProgress() && com.CarriedUnit == nil {
 		if rl.IsKeyPressed(rl.KeyQ) {
 			pc.selectNextBuildableCode(-1)
 		}
@@ -35,7 +35,7 @@ func (pc *playerController) control() {
 		}
 
 		if rl.IsKeyPressed(rl.KeyEnter) {
-			pc.faction.BuildsUnitNow = true
+			pc.faction.StartProduction()
 		}
 	}
 
@@ -78,35 +78,42 @@ func (pc *playerController) control() {
 }
 
 func (pc *playerController) selectNextBuildableCode(step int) {
+	code, order := pc.faction.GetSelectedProduction()
 	totalListSize := len(game_static.STableUnits)
 	changed := false
-	for !changed || game_static.STableUnits[pc.faction.CurrentBuiltUnitCode].IsCommander {
+	for !changed || game_static.STableUnits[code].IsCommander {
 		changed = true
-		pc.faction.CurrentBuiltUnitCode += step
-		if pc.faction.CurrentBuiltUnitCode >= totalListSize {
-			pc.faction.CurrentBuiltUnitCode = 0
+		code += step
+		if code >= totalListSize {
+			code = 0
 		}
-		if pc.faction.CurrentBuiltUnitCode < 0 {
-			pc.faction.CurrentBuiltUnitCode += totalListSize
+		if code < 0 {
+			code += totalListSize
 		}
 	}
-	pc.selectNextOrderForBuildable(0)
+	// Select next available order
+	for !game_static.STableUnits[code].CanDoOrder(order) {
+		order = (order + 1) % game_static.ORDERS_TOTAL
+	}
+	pc.faction.SetSelectedProduction(code, order)
 }
 
 func (pc *playerController) selectNextOrderForBuildable(step int) {
+	if step == 0 {
+		panic("Wat")
+	}
+	code, order := pc.faction.GetSelectedProduction()
 	totalListSize := game_static.ORDERS_TOTAL
 	done := false
 	for !done {
-		pc.faction.CurrentBuiltUnitOrderCode += step
-		if pc.faction.CurrentBuiltUnitOrderCode >= totalListSize {
-			pc.faction.CurrentBuiltUnitOrderCode = 0
+		order += step
+		if order >= totalListSize {
+			order = 0
 		}
-		if pc.faction.CurrentBuiltUnitOrderCode < 0 {
-			pc.faction.CurrentBuiltUnitOrderCode += totalListSize
+		if order < 0 {
+			order += totalListSize
 		}
-		_, done = game_static.STableUnits[pc.faction.CurrentBuiltUnitCode].OrderCosts[pc.faction.CurrentBuiltUnitOrderCode]
-		if step == 0 { // step 0 means "select next if current is not applicable"
-			step = 1
-		}
+		done = game_static.STableUnits[code].CanDoOrder(order)
 	}
+	pc.faction.SetSelectedProduction(code, order)
 }
