@@ -68,10 +68,10 @@ func loadSprites() {
 
 	projectilesAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/projectiles/"
-	projectilesAtlaces["shell"] = satlas.CreateDirectionalAtlasFromFile(currPath+"shell.png", 32, 16, 1, 2, false)
-	projectilesAtlaces["bullets"] = satlas.CreateDirectionalAtlasFromFile(currPath+"bullets.png", 32, 8, 1, 2, false)
+	projectilesAtlaces["shell"] = satlas.CreateDirectionalAtlasFromFile(currPath+"shell.png", 32, 16, 1, 4, false)
+	projectilesAtlaces["bullets"] = satlas.CreateDirectionalAtlasFromFile(currPath+"bullet.png", 32, 8, 1, 4, false)
 	projectilesAtlaces["missile"] = satlas.CreateDirectionalAtlasFromFile(currPath+"missile.png", 32, 16, 1, 2, false)
-	projectilesAtlaces["aamissile"] = satlas.CreateDirectionalAtlasFromFile(currPath+"aamissile.png", 32, 16, 1, 2, false)
+	projectilesAtlaces["aamissile"] = satlas.CreateDirectionalAtlasFromFile(currPath+"aamissile.png", 32, 16, 1, 4, false)
 	projectilesAtlaces["omni"] = satlas.CreateDirectionalAtlasFromFile(currPath+"omni.png", 32, 16, 1, 2, false)
 
 	uiAtlaces = make(map[string]*satlas.SpriteAtlas)
