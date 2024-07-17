@@ -24,6 +24,16 @@ func (u *Unit) GetFaction() *Faction {
 	return u.Faction
 }
 
+func (u *Unit) GetHpPercentage() int {
+	maxHp := u.GetStaticData().MaxHitpoints
+	return (100*u.Health + maxHp/2) / maxHp
+}
+
+func (u *Unit) GetFuelPercentage() int {
+	maxFuel := u.GetStaticData().MaxFuel
+	return (100*u.Fuel + maxFuel/2) / maxFuel
+}
+
 func (u *Unit) IsAlive() bool {
 	return u.Health > 0
 }

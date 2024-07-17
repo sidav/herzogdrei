@@ -41,3 +41,23 @@ func (c *Commander) GetTileCoordinates() (int, int) {
 func (c *Commander) GetStaticData() *UnitStatic {
 	return STableUnits[c.AsUnit.Code]
 }
+
+// Action setters
+
+func (c *Commander) ResetState() {
+	c.AsUnit.Action.Reset()
+}
+
+func (c *Commander) SetMoveState(vx, vy float64) {
+	c.AsUnit.Action.Kind = ACTION_CMOVE
+	c.AsUnit.Action.Vx = vx
+	c.AsUnit.Action.Vy = vy
+}
+
+func (c *Commander) SetPickupState() {
+	c.AsUnit.Action.Kind = ACTION_CPICKUP
+}
+
+func (c *Commander) SetDropState() {
+	c.AsUnit.Action.Kind = ACTION_CDROP
+}

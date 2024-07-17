@@ -41,10 +41,10 @@ func (pc *playerController) control() {
 
 	if rl.IsKeyPressed(rl.KeySpace) {
 		if com.CarriedUnit == nil {
-			com.AsUnit.Action.Kind = game.ACTION_CPICKUP
+			com.SetPickupState()
 			return
 		} else {
-			com.AsUnit.Action.Kind = game.ACTION_CDROP
+			com.SetDropState()
 			return
 		}
 	}
@@ -70,10 +70,9 @@ func (pc *playerController) control() {
 		vy = -1.0
 	}
 	if vx != 0 || vy != 0 {
-		com.AsUnit.Action.Kind = game.ACTION_CMOVE
-		com.AsUnit.Action.SetVector(vx, vy)
+		com.SetMoveState(vx, vy)
 	} else {
-		com.AsUnit.Action.Kind = game.ACTION_NONE
+		com.ResetState()
 	}
 }
 

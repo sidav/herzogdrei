@@ -26,7 +26,7 @@ func (f *Faction) ProductionInProgress() bool {
 	return f.buildsUnitNow
 }
 
-func (f *Faction) FinishedProduction() bool {
+func (f *Faction) IsProductionFinished() bool {
 	return f.currentBuildProgress == GetUnitStaticDataByCode(f.currentBuiltUnitCode).BuildTime
 }
 
@@ -59,7 +59,7 @@ func (f *Faction) ClearProductionState() {
 
 func (f *Faction) DoProductionStep() {
 	cost := f.GetTotalCostForCurrentProduction()
-	if f.FinishedProduction() {
+	if f.IsProductionFinished() {
 		return
 	}
 	price := cost / GetUnitStaticDataByCode(f.currentBuiltUnitCode).BuildTime

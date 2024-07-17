@@ -143,7 +143,7 @@ func (b *Battlefield) ExecuteCPickupActionForCommander(c *Commander) {
 	tx, ty := c.GetTileCoordinates()
 	bld := b.GetBuildingAtTileCoordinates(tx, ty)
 	if bld != nil {
-		if bld.Faction == c.AsUnit.Faction && bld.Faction.FinishedProduction() {
+		if bld.Faction == c.AsUnit.Faction && bld.Faction.IsProductionFinished() {
 			// create the unit
 			c.CarriedUnit = b.CreateNewUnit(
 				c.AsUnit.Faction.currentBuiltUnitCode,
