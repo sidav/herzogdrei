@@ -22,6 +22,10 @@ func (b *Building) GetFaction() *Faction {
 	return b.Faction
 }
 
+func (b *Building) GetTileCenterCoordinates() (int, int) {
+	return b.TopLeftX + b.GetStaticData().W/2, b.TopLeftY + b.GetStaticData().H/2
+}
+
 func (b *Building) IsAlive() bool {
 	return true
 }

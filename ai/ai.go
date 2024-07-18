@@ -12,6 +12,9 @@ type AiStruct struct {
 	faction *game.Faction
 	state   int
 
+	// macro-related variables
+	targetBuilding *game.Building
+
 	// state-related variables
 	coordsSet bool
 	tx, ty    int
@@ -28,9 +31,10 @@ func CreateNewAiStruct(b *game.Battlefield, faction *game.Faction) *AiStruct {
 
 func (a *AiStruct) Act() {
 	a.cheatMoney()
+	a.decideMacro()
 	a.decideProduction()
+	a.selectState()
 	if a.faction.Commander.IsAlive() {
-		a.selectState()
 		a.pilotCommander()
 	}
 }
@@ -49,4 +53,6 @@ func (a *AiStruct) debugPrint() {
 		fmt.Printf("$%d; standing by... ", a.faction.Gold)
 	}
 	fmt.Printf("Selected state: %d\n", a.state)
+	tx, ty := a.targetBuilding.GetPhysicalCenterCoords()
+	fmt.Printf("Target building at %.1f, %.1f\n", tx, ty)
 }

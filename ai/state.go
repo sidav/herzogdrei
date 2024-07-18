@@ -19,6 +19,12 @@ func (a *AiStruct) setCoords(x, y int) {
 }
 
 func (a *AiStruct) selectState() {
+	if !a.com.IsAlive() {
+		a.state = aiStateRefuelRepair
+	}
+	if a.state == aiStateDropBuiltUnit && a.com.CarriedUnit == nil {
+		panic("Something is wrong")
+	}
 	if a.state != aiStateUndecided {
 		return
 	}

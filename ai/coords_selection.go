@@ -30,7 +30,8 @@ func (a *AiStruct) getClosestRefuelCoords() (int, int) {
 }
 
 func (ai *AiStruct) getClosestBuiltUnitPickupCoords() (int, int) {
-	cx, cy := ai.getCommanderRealCoords()
+	// Pick up from the building closest to the target one
+	cx, cy := ai.targetBuilding.GetPhysicalCenterCoords()
 	bld := ai.btf.SelectActorWithHighestScore(
 		func(act game.Actor) (int, bool) {
 			b, ok := act.(*game.Building)
@@ -47,10 +48,9 @@ func (ai *AiStruct) getClosestBuiltUnitPickupCoords() (int, int) {
 	panic("Bad logic")
 }
 
-func (a *AiStruct) getUnitDropCoords() (int, int) {
+func (a *AiStruct) getUnitDropCoords(searchNear game.Actor, searchRange int) (int, int) {
 	// TODO: better logic regarding to the unit's order
-	const searchRange = 5
-	tx, ty := a.com.GetTileCoordinates()
+	tx, ty := geometry.TrueCoordsToTileCoords(searchNear.GetPhysicalCenterCoords())
 	tries := 0
 	for tries < 25 {
 		tries++

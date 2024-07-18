@@ -1,5 +1,7 @@
 package ai
 
+import "herzog/game"
+
 func (a *AiStruct) pilotCommander() {
 	switch a.state {
 	case aiStateUndecided:
@@ -38,7 +40,19 @@ func (a *AiStruct) pickUpBuiltUnit() {
 
 func (a *AiStruct) dropBuiltUnit() {
 	if !a.coordsSet || !a.btf.AreCoordsPassable(a.tx, a.ty) {
-		a.setCoords(a.getUnitDropCoords())
+		var dropNear game.Actor = a.targetBuilding
+		dropRange := 5
+		if a.isHealthOrFuelCritical() {
+			dropNear = a.com // If fuel is critical, drop ASAP!
+			dropRange = 4
+		}
+		// if target bld is not neutral, drop near com
+		//  TODO: drop near closest base
+		if a.targetBuilding.GetFaction() != nil {
+			dropNear = a.com
+			dropRange = 7
+		}
+		a.setCoords(a.getUnitDropCoords(dropNear, dropRange))
 	}
 	if !a.commanderArrived(a.tx, a.ty) {
 		a.flyCommanderToCoords(a.tx, a.ty)
