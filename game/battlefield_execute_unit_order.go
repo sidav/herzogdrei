@@ -6,6 +6,9 @@ import (
 )
 
 func (b *Battlefield) ExecuteUnitOrder(u *Unit) {
+	if u.Order.TargetActor != nil && !u.Order.TargetActor.IsAlive() {
+		u.Order.TargetActor = nil
+	}
 	switch u.Order.Code {
 	case ORDER_STANDBY:
 		b.executeStandbyOrderForUnit(u)
@@ -73,6 +76,10 @@ func (b *Battlefield) executeCaptureOrderForUnit(u *Unit) {
 		u.Order.TargetActor = targetBuilding
 	}
 	if u.Order.TargetActor != nil {
+		if u.Order.TargetActor.GetFaction() == u.GetFaction() {
+			u.Order.TargetActor = nil
+			return
+		}
 		bld := u.Order.TargetActor.(*Building)
 		bx, by := bld.TopLeftX, bld.TopLeftY
 		if geometry.GetApproxDistFromTo(tx, ty, bx, by) <= 1 { // Enter building

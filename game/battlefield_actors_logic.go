@@ -10,3 +10,20 @@ func (b *Battlefield) SwitchTilePointersForGroundActor(a Actor, oldtx, oldty, ne
 	}
 	b.Tiles[newtx][newty].landActorHere = a
 }
+
+// May be useful for AI or something
+func (b *Battlefield) SelectActorWithHighestScore(getScore func(Actor) (score int, selectable bool)) Actor {
+	var seletedActor Actor
+	var selectedScore int
+	for _, act := range b.Actors {
+		score, actorSelectable := getScore(act)
+		if !actorSelectable {
+			continue
+		}
+		if seletedActor == nil || selectedScore < score {
+			seletedActor = act
+			selectedScore = score
+		}
+	}
+	return seletedActor
+}

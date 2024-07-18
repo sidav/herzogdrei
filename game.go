@@ -2,6 +2,7 @@ package main
 
 import (
 	. "herzog/game"
+	"herzog/lib/random/pcgrandom"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -14,13 +15,15 @@ type Game struct {
 func (g *Game) Init() {
 	g.gameIsRunning = false
 	g.battlefield = Battlefield{}
-	g.battlefield.Init()
 }
 
 func (g *Game) Start() {
+	rnd := pcgrandom.New(-1)
+	g.battlefield.Init(rnd)
 	g.gameIsRunning = true
 	r := renderer{}
 	pc := playerController{}
+
 	pc.init(g.battlefield.Factions[0])
 
 	for rl.GetKeyPressed() != rl.KeyEscape {

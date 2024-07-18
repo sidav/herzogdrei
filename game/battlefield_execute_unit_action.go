@@ -86,6 +86,7 @@ func (b *Battlefield) ExecuteEnterBuildingActionForUnit(u *Unit) {
 	u.Action.MovementRemaining -= moveSpeed
 	// The building is entered
 	if u.Action.MovementRemaining < 0.005 {
+		u.Health = 0
 		b.removeActorFromList(u)
 		b.progressBuildingCapture(u.Order.TargetActor.(*Building), u.Faction)
 	}

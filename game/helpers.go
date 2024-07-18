@@ -7,6 +7,10 @@ import (
 
 var rnd random.PRNG
 
+func SetPRNG(r random.PRNG) {
+	rnd = r
+}
+
 func areFloatsRoughlyEqual(f, g float64) bool {
 	return math.Abs(f-g) < 0.01
 }

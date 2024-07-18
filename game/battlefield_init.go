@@ -2,33 +2,32 @@ package game
 
 import (
 	. "herzog/game/game_static"
-	"herzog/lib/geometry"
-	"herzog/lib/random/pcgrandom"
+	"herzog/lib/random"
 )
 
-func (b *Battlefield) Init() {
-	rnd = pcgrandom.New(-1)
+func (b *Battlefield) Init(r random.PRNG) {
+	SetPRNG(r)
 
 	b.Factions = make([]*Faction, 0)
 	b.initFromStringMap()
 
 	// Random enemy units for debug
-	f1bx, f1by := b.Factions[0].HQBuilding.TopLeftX, b.Factions[0].HQBuilding.TopLeftY
-	for i := 0; i < 20; i++ {
-		x, y := -1, -1
-		for !b.AreCoordsPassable(x, y) || geometry.GetApproxDistFromTo(x, y, f1bx, f1by) < 7 {
-			x, y = rnd.Rand(len(b.Tiles)), rnd.Rand(len(b.Tiles[0]))
-		}
-		rx, ry := geometry.TileCoordsToTrueCoords(x, y)
-		u := b.CreateNewUnit(
-			rnd.RandInRange(UNIT_QUAD, UNIT_TANK),
-			b.Factions[1],
-			rx, ry,
-		)
-		u.ChassisDegree = 45 * rnd.Rand(8)
-		u.snapTurretsDegreesToChassis()
-		b.addActor(u)
-	}
+	// f1bx, f1by := b.Factions[0].HQBuilding.TopLeftX, b.Factions[0].HQBuilding.TopLeftY
+	// for i := 0; i < 20; i++ {
+	// 	x, y := -1, -1
+	// 	for !b.AreCoordsPassable(x, y) || geometry.GetApproxDistFromTo(x, y, f1bx, f1by) < 7 {
+	// 		x, y = rnd.Rand(len(b.Tiles)), rnd.Rand(len(b.Tiles[0]))
+	// 	}
+	// 	rx, ry := geometry.TileCoordsToTrueCoords(x, y)
+	// 	u := b.CreateNewUnit(
+	// 		rnd.RandInRange(UNIT_QUAD, UNIT_TANK),
+	// 		b.Factions[1],
+	// 		rx, ry,
+	// 	)
+	// 	u.ChassisDegree = 45 * rnd.Rand(8)
+	// 	u.snapTurretsDegreesToChassis()
+	// 	b.addActor(u)
+	// }
 }
 
 func (b *Battlefield) initAndPlaceNewFaction(hqx, hqy int) {
