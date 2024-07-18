@@ -1,6 +1,7 @@
 package main
 
 import (
+	"herzog/ai"
 	. "herzog/game"
 	"herzog/lib/random/pcgrandom"
 
@@ -25,11 +26,16 @@ func (g *Game) Start() {
 	pc := playerController{}
 
 	pc.init(g.battlefield.Factions[0])
+	ais := []*ai.AiStruct{ai.CreateNewAiStruct(&g.battlefield, g.battlefield.Factions[1])}
+	ai.SetPRNG(rnd)
 
 	for rl.GetKeyPressed() != rl.KeyEscape {
 		r.renderBattlefield(&g.battlefield)
 
 		pc.control()
+		for i := range ais {
+			ais[i].Act()
+		}
 
 		for _, a := range g.battlefield.Actors {
 			switch a.(type) {
