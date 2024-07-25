@@ -5,6 +5,32 @@ import (
 	"herzog/lib/geometry"
 )
 
+func (b *Battlefield) ExecuteCommanderAction(c *Commander) {
+	// if c.AsUnit.Fuel <= 0 {
+	// 	c.AsUnit.Health = 0
+	// }
+	if !c.IsAlive() {
+		b.DoCommanderRespawnSequence(c)
+		return
+	}
+	if c.IsTransforming {
+		b.DoCommanderTransformationSequence(c)
+		return
+	}
+	b.TryRefuelAndRepairCommander(c)
+	b.TryFireForCommander(c)
+	switch c.AsUnit.Action.Kind {
+	case ACTION_NONE:
+		return
+	case ACTION_CMOVE:
+		b.ExecuteCMoveActionForCommander(c)
+	case ACTION_CPICKUP:
+		b.ExecuteCPickupActionForCommander(c)
+	case ACTION_CDROP:
+		b.ExecuteCDropActionForCommander(c)
+	}
+}
+
 func (b *Battlefield) TryRefuelAndRepairCommander(com *Commander) {
 	refuel := b.CurrentTick%1 == 0
 	repair := b.CurrentTick%6 == 0
@@ -82,35 +108,13 @@ func (b *Battlefield) TryFireForCommander(com *Commander) {
 	b.shootAsTurret(com, com.AsUnit.Turrets[0])
 }
 
-func (b *Battlefield) ExecuteCommanderAction(c *Commander) {
-	if c.AsUnit.Fuel <= 0 {
-		c.AsUnit.Health = 0
-	}
-	if !c.IsAlive() {
-		b.DoCommanderRespawnSequence(c)
-		return
-	}
-	if c.IsTransforming {
-		b.DoCommanderTransformationSequence(c)
-		return
-	}
-	b.TryRefuelAndRepairCommander(c)
-	b.TryFireForCommander(c)
-	switch c.AsUnit.Action.Kind {
-	case ACTION_NONE:
-		return
-	case ACTION_CMOVE:
-		b.ExecuteCMoveActionForCommander(c)
-	case ACTION_CPICKUP:
-		b.ExecuteCPickupActionForCommander(c)
-	case ACTION_CDROP:
-		b.ExecuteCDropActionForCommander(c)
-	}
-}
-
 func (b *Battlefield) ExecuteCMoveActionForCommander(c *Commander) {
 	vx, vy := geometry.VectorToUnitVectorFloat64(c.AsUnit.Action.Vx, c.AsUnit.Action.Vy)
 	moveSpeed := c.GetStaticData().MovementSpeed
+	if c.AsUnit.Fuel <= 0 {
+		c.AsUnit.Fuel = 0
+		moveSpeed /= 2
+	}
 
 	targetDegree := geometry.GetDegreeOfFloatVector(vx, vy)
 	if c.AsUnit.ChassisDegree != targetDegree {
