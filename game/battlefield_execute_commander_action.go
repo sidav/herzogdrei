@@ -172,6 +172,9 @@ func (b *Battlefield) ExecuteCDropActionForCommander(c *Commander) {
 	tx, ty := c.GetTileCoordinates()
 	if b.AreCoordsPassable(tx, ty) {
 		c.CarriedUnit.ChassisDegree = c.AsUnit.ChassisDegree
+		if c.CarriedUnit.GetStaticData().ChassisRotationSpeed == 0 {
+			c.CarriedUnit.ChassisDegree = 270
+		}
 		c.CarriedUnit.snapTurretsDegreesToChassis()
 		c.CarriedUnit.CenterX, c.CarriedUnit.CenterY = geometry.TileCoordsToTrueCoords(tx, ty)
 

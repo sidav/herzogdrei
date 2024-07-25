@@ -38,6 +38,7 @@ const (
 	UNIT_AATANK
 	UNIT_TANK
 	UNIT_DEVASTATOR
+	UNIT_TURRET
 )
 
 func GetUnitStaticDataByCode(code int) *UnitStatic {
@@ -119,7 +120,7 @@ var STableUnits = map[int]*UnitStatic{
 		Cost:                 100,
 		BuildTime:            7,
 		OrderCosts: map[int]int{
-			ORDER_CAPTURE:        150,
+			ORDER_CAPTURE: 150,
 		},
 	},
 	UNIT_RECON: {
@@ -131,7 +132,7 @@ var STableUnits = map[int]*UnitStatic{
 		Cost:                 200,
 		BuildTime:            10,
 		OrderCosts: map[int]int{
-			ORDER_CAPTURE:        150,
+			ORDER_CAPTURE: 150,
 		},
 	},
 	UNIT_QUAD: {
@@ -269,6 +270,43 @@ var STableUnits = map[int]*UnitStatic{
 					Speed:                     0.3,
 					CreatesEffectOnImpact:     true,
 					EffectCreatedOnImpactCode: EFFECT_REGULAR_EXPLOSION,
+				},
+			},
+		},
+		OrderCosts: map[int]int{
+			ORDER_STANDBY:        0,
+			ORDER_SEARCHNDESTROY: 150,
+			ORDER_PATROL:         100,
+		},
+	},
+	UNIT_TURRET: {
+		DisplayedName:        "Turret",
+		ChassisSpriteCode:    "turretunit",
+		MaxHitpoints:         250,
+		MovementSpeed:        0,
+		ChassisRotationSpeed: 0,
+		Cost:                 1000,
+		BuildTime:            2,
+		TurretsData: []*TurretStatic{
+			{
+				SpriteCode:          "minigunturret",
+				AttacksLand:         true,
+				RotateSpeed:         4,
+				FireRange:           7.5,
+				FireSpreadDegrees:   6,
+				ShotRangeSpread:     0.8,
+				MaxShotsInVolley:    1,
+				CooldownPerShot:     0,
+				CooldownAfterVolley: 6,
+				FiredProjectileData: &ProjectileStatic{
+					SpriteCode:                "bullets",
+					SplashRadius:              0.15,
+					HitDamage:                 4,
+					SplashDamage:              10,
+					Size:                      0.3,
+					Speed:                     0.4,
+					CreatesEffectOnImpact:     true,
+					EffectCreatedOnImpactCode: EFFECT_SMALL_EXPLOSION,
 				},
 			},
 		},

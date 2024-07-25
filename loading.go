@@ -59,12 +59,14 @@ func loadSprites() {
 	unitChassisAtlaces["quad"] = satlas.CreateDirectionalAtlasFromFile(currPath+"quad.png", 32, 16, 1, 2, true)
 	unitChassisAtlaces["tankchassis"] = satlas.CreateDirectionalAtlasFromFile(currPath+"tank_chassis.png", 32, 16, 1, 2, true)
 	unitChassisAtlaces["devastator"] = satlas.CreateDirectionalAtlasFromFile(currPath+"devastator.png", 26, 16, 1, 2, true)
+	unitChassisAtlaces["turretunit"] = satlas.CreateDirectionalAtlasFromFile(currPath+"turret_base.png", 32, 16, 1, 1, true)
 
 	turretsAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/units/"
 	turretsAtlaces["tankcannon"] = satlas.CreateDirectionalAtlasFromFile(currPath+"tank_cannon.png", 32, 16, 1, 2, true)
 	turretsAtlaces["aatankturret"] = satlas.CreateDirectionalAtlasFromFile(currPath+"aatank_turret.png", 32, 16, 1, 2, true)
 	turretsAtlaces["devastatorturret"] = satlas.CreateDirectionalAtlasFromFile(currPath+"devastator_turret.png", 26, 16, 1, 2, true)
+	turretsAtlaces["minigunturret"] = satlas.CreateDirectionalAtlasFromFile(currPath+"minigun_turret.png", 32, 16, 1, 2, true)
 
 	projectilesAtlaces = make(map[string]*satlas.SpriteAtlas)
 	currPath = "resources/sprites/projectiles/"
