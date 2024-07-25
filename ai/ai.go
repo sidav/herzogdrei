@@ -40,7 +40,7 @@ func (a *AiStruct) Act() {
 
 func (a *AiStruct) cheatMoney() {
 	if a.btf.CurrentTick%60 == 0 {
-		a.faction.Gold += 10
+		a.faction.Gold += 5
 	}
 }
 

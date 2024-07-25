@@ -4,9 +4,7 @@ import "herzog/game"
 
 func (a *AiStruct) pilotCommander() {
 	switch a.state {
-	case aiStateUndecided:
-		a.com.ResetState()
-	case aiStateRefuelRepair:
+	case aiStateUndecided, aiStateRefuelRepair:
 		a.refuelRepairCommander()
 	case aiStatePickUpBuiltUnit:
 		a.pickUpBuiltUnit()

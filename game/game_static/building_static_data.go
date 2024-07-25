@@ -28,6 +28,6 @@ var STableBuildings = map[int]*BuildingStatic{
 		H:             2,
 		DisplayedName: "Base",
 		SpriteCode:    "base",
-		GivesMoney:    2,
+		GivesMoney:    4,
 	},
 }

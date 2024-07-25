@@ -25,8 +25,8 @@ func (r *renderer) renderUI(b *game.Battlefield, f *game.Faction) {
 	if u != nil {
 		r.drawUnitInfo(u, "Unit on ground", WINDOW_W/2-160, WINDOW_H-160)
 	}
-	if b.CurrentTick%10 == 0 {
-		r.updateMinimap(b)
+	if b.CurrentTick%30 == 0 {
+		r.updateMinimap(b, f)
 	}
 	r.renderMinimap(b, f,
 		WINDOW_W-(MINIMAP_PIXEL_SIZE*int32(len(r.minimap)))-4,

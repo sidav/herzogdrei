@@ -6,7 +6,13 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func (r *renderer) updateMinimap(b *game.Battlefield) {
+func (r *renderer) putMinimapPixel(x, y int, col rl.Color) {
+	if x > 0 && y > 0 && x < len(r.minimap) && y < len(r.minimap[0]) {
+		r.minimap[x][y] = col
+	}
+}
+
+func (r *renderer) updateMinimap(b *game.Battlefield, forFaction *game.Faction) {
 	if r.minimap == nil {
 		r.minimap = make([][]rl.Color, len(b.Tiles))
 		for i := range b.Tiles {
@@ -31,6 +37,20 @@ func (r *renderer) updateMinimap(b *game.Battlefield) {
 				}
 			}
 		}
+	}
+	for _, f := range b.Factions {
+		if f == forFaction {
+			continue
+		}
+		col := *r.getFactionColor(f)
+		col.R /= 2
+		col.G /= 2
+		col.B /= 2
+		cx, cy := f.Commander.GetTileCoordinates()
+		r.putMinimapPixel(cx-1, cy, col)
+		r.putMinimapPixel(cx+1, cy, col)
+		r.putMinimapPixel(cx, cy-1, col)
+		r.putMinimapPixel(cx, cy+1, col)
 	}
 }
 
