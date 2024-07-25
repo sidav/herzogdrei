@@ -45,10 +45,9 @@ func (a *AiStruct) dropBuiltUnit() {
 		if a.isHealthOrFuelCritical() {
 			dropNear = a.com // If fuel is critical, drop ASAP!
 			dropRange = 4
-		}
-		// if target bld is not neutral, drop near com
-		//  TODO: drop near closest base
-		if a.targetBuilding.GetFaction() != nil {
+		} else if a.targetBuilding.GetFaction() != nil {
+			// if target bld is not neutral, drop near com
+			//  TODO: drop near closest base?
 			dropNear = a.com
 			dropRange = 7
 		}

@@ -119,9 +119,6 @@ var STableUnits = map[int]*UnitStatic{
 		Cost:                 100,
 		BuildTime:            7,
 		OrderCosts: map[int]int{
-			ORDER_STANDBY:        0,
-			ORDER_SEARCHNDESTROY: 50,
-			ORDER_PATROL:         50,
 			ORDER_CAPTURE:        150,
 		},
 	},
@@ -134,9 +131,6 @@ var STableUnits = map[int]*UnitStatic{
 		Cost:                 200,
 		BuildTime:            10,
 		OrderCosts: map[int]int{
-			ORDER_STANDBY:        0,
-			ORDER_SEARCHNDESTROY: 50,
-			ORDER_PATROL:         50,
 			ORDER_CAPTURE:        150,
 		},
 	},

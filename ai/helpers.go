@@ -1,6 +1,7 @@
 package ai
 
 import (
+	"fmt"
 	"herzog/lib/random"
 )
 
@@ -8,6 +9,14 @@ var rnd random.PRNG
 
 func SetPRNG(r random.PRNG) {
 	rnd = r
+}
+
+func print(str string, args ...interface{}) {
+	fmt.Printf(str+"\n", args...)
+}
+
+func printf(str string, args ...interface{}) {
+	fmt.Printf(str, args...)
 }
 
 func (a *AiStruct) getCommanderTileCoords() (int, int) {

@@ -1,7 +1,6 @@
 package ai
 
 import (
-	"fmt"
 	"herzog/game"
 )
 
@@ -46,13 +45,13 @@ func (a *AiStruct) cheatMoney() {
 }
 
 func (a *AiStruct) debugPrint() {
-	fmt.Printf("=== TICK %d ===\n", a.btf.CurrentTick)
+	printf("=== TICK %d ===\n", a.btf.CurrentTick)
 	if a.faction.ProductionInProgress() {
-		fmt.Printf("$%d; producing %d%%... ", a.faction.Gold, a.faction.GetCurrentProductionPercentage())
+		printf("$%d; producing %d%%... ", a.faction.Gold, a.faction.GetCurrentProductionPercentage())
 	} else {
-		fmt.Printf("$%d; standing by... ", a.faction.Gold)
+		printf("$%d; standing by... ", a.faction.Gold)
 	}
-	fmt.Printf("Selected state: %d\n", a.state)
+	printf("Selected state: %d\n", a.state)
 	tx, ty := a.targetBuilding.GetPhysicalCenterCoords()
-	fmt.Printf("Target building at %.1f, %.1f\n", tx, ty)
+	printf("Target building at %.1f, %.1f\n", tx, ty)
 }

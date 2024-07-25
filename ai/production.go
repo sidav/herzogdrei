@@ -20,9 +20,9 @@ func (a *AiStruct) selectRandomProduction() (int, int) {
 	for game_static.STableUnits[code].IsCommander {
 		code = rnd.Rand(len(game_static.STableUnits))
 	}
-	order := -1
-	for order == -1 || !game_static.STableUnits[code].CanDoOrder(order) {
-		order = rnd.Rand(len(game_static.STableUnits[code].OrderCosts))
+	order := rnd.Rand(game_static.ORDERS_TOTAL)
+	for !game_static.STableUnits[code].CanDoOrder(order) {
+		order = (order + 1) % game_static.ORDERS_TOTAL
 	}
 	return code, order
 }
