@@ -1,11 +1,16 @@
 package game
 
 import (
+	"fmt"
 	"herzog/lib/random"
 	"math"
 )
 
 var rnd random.PRNG
+
+func print(str string, args ...interface{}) {
+	fmt.Printf(str+"\n", args...)
+}
 
 func SetPRNG(r random.PRNG) {
 	rnd = r

@@ -1,6 +1,9 @@
 package game
 
-import "herzog/game/game_static"
+import (
+	"herzog/game/game_static"
+	"time"
+)
 
 func (b *Battlefield) CleanProjectiles() {
 	for i := len(b.Projectiles) - 1; i >= 0; i-- {
@@ -43,9 +46,33 @@ func (b *Battlefield) CleanDeadUnits() {
 					}
 				}
 				if !cleared {
-					panic("unsuccessful tile clean!")
+					// panic("unsuccessful tile clean!")
+					print("WARNING: unsuccessful tile clean!")
+					print("Resolving the problem with tile traversing...")
+					time.Sleep(5 * time.Second)
+					b.CleanUnitFromTiles(unt)
 				}
 			}
 		}
 	}
+}
+
+// Should not be called frequently.
+func (b *Battlefield) CleanUnitFromTiles(u *Unit) {
+	ux, uy := u.GetPhysicalCenterCoords()
+	print("Delecting the unit %s at %.2f, %.2f", u.GetStaticData().DisplayedName, ux, uy)
+	cleared := false
+	for x := range b.Tiles {
+		for y := range b.Tiles[x] {
+			if b.Tiles[x][y].landActorHere == u {
+				print("Manually deleted from %d,%d", x, y)
+				b.Tiles[x][y].landActorHere = nil
+				cleared = true
+			}
+		}
+	}
+	if !cleared {
+		print("No actor to delete!")
+	}
+	time.Sleep(5 * time.Second)
 }

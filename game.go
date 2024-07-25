@@ -26,7 +26,10 @@ func (g *Game) Start() {
 	pc := playerController{}
 
 	pc.init(g.battlefield.Factions[0])
-	ais := []*ai.AiStruct{ai.CreateNewAiStruct(&g.battlefield, g.battlefield.Factions[1])}
+	var ais []*ai.AiStruct
+	for i := 1; i < len(g.battlefield.Factions); i++ {
+		ais = append(ais, ai.CreateNewAiStruct(&g.battlefield, g.battlefield.Factions[i]))
+	}
 	ai.SetPRNG(rnd)
 
 	for rl.GetKeyPressed() != rl.KeyEscape {
