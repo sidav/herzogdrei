@@ -10,7 +10,7 @@ func CenterString(str string, width int) string {
 func CenterStringBetween(leftStr, centerStr, rightStr string, width int) string {
 	totalLen := len(leftStr) + len(centerStr) + len(rightStr)
 	spaces := int(float64(width-totalLen) / 2)
-	if spaces < 0 {
+	if spaces <= 0 || width-(spaces+totalLen) <= 0 {
 		return leftStr + centerStr + rightStr
 	}
 	return leftStr +

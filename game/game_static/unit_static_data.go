@@ -311,9 +311,7 @@ var STableUnits = map[int]*UnitStatic{
 			},
 		},
 		OrderCosts: map[int]int{
-			ORDER_STANDBY:        0,
-			ORDER_SEARCHNDESTROY: 150,
-			ORDER_PATROL:         100,
+			ORDER_STANDBY: 0,
 		},
 	},
 }

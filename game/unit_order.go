@@ -15,6 +15,13 @@ func (o *Order) Reset() {
 	o.Code = ORDER_STANDBY
 	o.TargetX = -1
 	o.TargetY = -1
+	o.TargetActor = nil
+}
+
+func (o *Order) ResetTargets() {
+	o.TargetX = -1
+	o.TargetY = -1
+	o.TargetActor = nil
 }
 
 func (o *Order) SetTargetTile(x, y int) {

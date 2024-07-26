@@ -13,6 +13,7 @@ type Faction struct {
 	currentBuiltUnitCode      int
 	currentBuiltUnitOrderCode int
 	currentBuildProgress      int
+	orderToBeGivenOnDrop      int // new order to be set after drop
 	buildsUnitNow             bool
 }
 
@@ -40,6 +41,14 @@ func (f *Faction) SetSelectedProduction(unitCode, orderCode int) {
 	}
 	f.currentBuiltUnitCode = unitCode
 	f.currentBuiltUnitOrderCode = orderCode
+}
+
+func (f *Faction) SetOrderToBeGivenOnDrop(orderCode int) {
+	f.orderToBeGivenOnDrop = orderCode
+}
+
+func (f *Faction) GetOrderToBeGivenOnDrop() int {
+	return f.orderToBeGivenOnDrop
 }
 
 func (f *Faction) GetSelectedProduction() (unitCode, orderCode int) {

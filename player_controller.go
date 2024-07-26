@@ -19,23 +19,32 @@ func (pc *playerController) init(f *game.Faction) {
 func (pc *playerController) control() {
 	com := pc.faction.Commander
 
-	if !pc.faction.ProductionInProgress() && com.CarriedUnit == nil {
-		if rl.IsKeyPressed(rl.KeyQ) {
-			pc.selectNextBuildableCode(-1)
-		}
-		if rl.IsKeyPressed(rl.KeyE) {
-			pc.selectNextBuildableCode(1)
-		}
+	if !pc.faction.ProductionInProgress() {
+		if com.CarriedUnit == nil {
+			if rl.IsKeyPressed(rl.KeyQ) {
+				pc.selectNextBuildableCode(-1)
+			}
+			if rl.IsKeyPressed(rl.KeyE) {
+				pc.selectNextBuildableCode(1)
+			}
 
-		if rl.IsKeyPressed(rl.KeyA) {
-			pc.selectNextOrderForBuildable(-1)
-		}
-		if rl.IsKeyPressed(rl.KeyD) {
-			pc.selectNextOrderForBuildable(1)
-		}
+			if rl.IsKeyPressed(rl.KeyA) {
+				pc.selectNextOrderForBuildable(-1)
+			}
+			if rl.IsKeyPressed(rl.KeyD) {
+				pc.selectNextOrderForBuildable(1)
+			}
 
-		if rl.IsKeyPressed(rl.KeyEnter) {
-			pc.faction.StartProduction()
+			if rl.IsKeyPressed(rl.KeyEnter) {
+				pc.faction.StartProduction()
+			}
+		} else {
+			if rl.IsKeyPressed(rl.KeyA) {
+				pc.selectNextOrderForPickedUpUnit(-1)
+			}
+			if rl.IsKeyPressed(rl.KeyD) {
+				pc.selectNextOrderForPickedUpUnit(1)
+			}
 		}
 	}
 
@@ -115,4 +124,25 @@ func (pc *playerController) selectNextOrderForBuildable(step int) {
 		done = game_static.STableUnits[code].CanDoOrder(order)
 	}
 	pc.faction.SetSelectedProduction(code, order)
+}
+
+func (pc *playerController) selectNextOrderForPickedUpUnit(step int) {
+	if step == 0 {
+		panic("Wat")
+	}
+	static := pc.faction.Commander.CarriedUnit.GetStaticData()
+	order := pc.faction.GetOrderToBeGivenOnDrop()
+	totalListSize := game_static.ORDERS_TOTAL
+	done := false
+	for !done {
+		order += step
+		if order >= totalListSize {
+			order = 0
+		}
+		if order < 0 {
+			order += totalListSize
+		}
+		done = static.CanDoOrder(order)
+	}
+	pc.faction.SetOrderToBeGivenOnDrop(order)
 }

@@ -155,7 +155,9 @@ func (b *Battlefield) ExecuteCPickupActionForCommander(c *Commander) {
 				c.AsUnit.CenterX,
 				c.AsUnit.CenterY,
 			)
-			c.CarriedUnit.Order.Code = c.AsUnit.Faction.Commander.AsUnit.Faction.currentBuiltUnitOrderCode
+			orderCode := c.AsUnit.Faction.currentBuiltUnitOrderCode
+			c.CarriedUnit.Order.Code = orderCode
+			c.AsUnit.Faction.orderToBeGivenOnDrop = orderCode
 			// Reset the faction build state
 			c.AsUnit.Faction.ClearProductionState()
 		}
@@ -163,9 +165,12 @@ func (b *Battlefield) ExecuteCPickupActionForCommander(c *Commander) {
 		u := b.TakeGroundUnitFromTileCoordinates(tx, ty)
 		if u != nil {
 			c.CarriedUnit = u
+			c.AsUnit.Faction.orderToBeGivenOnDrop = u.Order.Code
+			u.Order.ResetTargets()
+			u.Action.Reset()
 		}
 	}
-	c.AsUnit.Action.Kind = ACTION_NONE
+	c.AsUnit.Action.Reset()
 }
 
 func (b *Battlefield) ExecuteCDropActionForCommander(c *Commander) {
@@ -178,13 +183,26 @@ func (b *Battlefield) ExecuteCDropActionForCommander(c *Commander) {
 		c.CarriedUnit.snapTurretsDegreesToChassis()
 		c.CarriedUnit.CenterX, c.CarriedUnit.CenterY = geometry.TileCoordsToTrueCoords(tx, ty)
 
-		c.CarriedUnit.Action.Kind = ACTION_NONE
+		c.CarriedUnit.Action.Reset()
 		c.CarriedUnit.Order.SetOrigin(tx, ty)
+
+		// Set the new order
+		newOrderCode := c.GetFaction().orderToBeGivenOnDrop
+		if c.CarriedUnit.Order.Code != newOrderCode {
+			canPerform := c.CarriedUnit.GetStaticData().CanDoOrder(newOrderCode)
+			if !canPerform {
+				panic("Unallowed order set!")
+			}
+			cost := c.CarriedUnit.GetStaticData().OrderCosts[newOrderCode]
+			c.CarriedUnit.Order.Code = newOrderCode
+			c.CarriedUnit.Order.ResetTargets()
+			c.GetFaction().Gold -= cost // allow negative values?
+		}
 
 		b.addActor(c.CarriedUnit)
 		c.CarriedUnit = nil
 
-		c.AsUnit.Action.Kind = ACTION_NONE
+		c.AsUnit.Action.Reset()
 	}
 }
 
